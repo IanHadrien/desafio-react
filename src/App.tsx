@@ -1,7 +1,10 @@
-import Index from "./pages";
+import { ThemeProvider } from "./contexts/ThemeProvider";
+import Index from "./pages/index";
 
 export default function App() {
   return (
-    <Index />
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <Index />
+    </ThemeProvider>
   )
 }
