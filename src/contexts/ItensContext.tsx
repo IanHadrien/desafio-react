@@ -11,6 +11,8 @@ export interface ItensTypes {
 interface ItensContextType {
   itens: ItensTypes[]
   saveItemsContext: (newItens: ItensTypes) => void
+  updateItemsContext: (editItens: ItensTypes) => void
+  deleteItemContext: (idIten: string) => void
 }
 
 export const ItensContext = createContext({} as ItensContextType)
@@ -19,38 +21,47 @@ interface ItensContextProviderProps {
   children: ReactNode
 }
 
-export function ItensContextProvider({ 
-  children
-}: ItensContextProviderProps) {
-  const [itens, setItens] = useState(
-    [
-      {
-        id: '1',
-        name: 'Teste',
-        description: 'teste',
-        created_at: '28/90/2024',
-        priority: 'alta'
-      },
-      {
-        id: '2',
-        name: 'Teste 2',
-        description: 'teste 2',
-        created_at: '28/90/2024',
-        priority: 'baixa'
-      },
-    ]
-  )
+export function ItensContextProvider({ children }: ItensContextProviderProps) {
+  const [itens, setItens] = useState([
+    {
+      id: '1',
+      name: 'Teste',
+      description: 'teste',
+      created_at: '28/90/2024',
+      priority: 'alta',
+    },
+    {
+      id: '2',
+      name: 'Teste 2',
+      description: 'teste 2',
+      created_at: '28/90/2024',
+      priority: 'baixa',
+    },
+  ])
 
   const saveItemsContext = (newItens: ItensTypes) => {
     setItens([...itens, newItens])
-    console.log('saveItemsContext', newItens)
+  }
+
+  const updateItemsContext = (editItens: ItensTypes) => {
+    setItens((prevItens) =>
+      prevItens.map((item) =>
+        item.id === editItens.id ? { ...item, ...editItens } : item
+      )
+    )
+  }
+
+  const deleteItemContext = (idIten: string) => {
+    setItens((prevItens) => prevItens.filter((item) => item.id !== idIten))
   }
 
   return (
     <ItensContext.Provider
       value={{
         itens,
-        saveItemsContext        
+        saveItemsContext,
+        updateItemsContext,
+        deleteItemContext
       }}
     >
       {children}
