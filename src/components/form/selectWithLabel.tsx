@@ -23,6 +23,7 @@ interface SelectWithLabelProps {
   setValue: UseFormSetValue<any>
   watch: UseFormWatch<any>
   errors: FieldErrors<any>
+  disabled: boolean
 }
 
 interface SelectWithLabelDataProps {
@@ -39,6 +40,7 @@ export function SelectWithLabel({
   errors,
   watch,
   setValue,
+  disabled
 }: SelectWithLabelProps) {
   const selectedValue = watch(id) // Watching the value of the select field
 
@@ -52,7 +54,8 @@ export function SelectWithLabel({
     <div className="grid w-full items-center gap-1.5 mb-4">
       <Label htmlFor={id}>{label}</Label>
       <Select
-        onValueChange={(value) => setValue(id, value)} // Using setValue to update the form value
+        onValueChange={(value) => setValue(id, value)}
+        disabled={disabled}
       >
         <SelectTrigger className={`border ${errors[id] && 'border-red-500'}`}>
           <SelectValue placeholder={selectedValue || placeholder} />

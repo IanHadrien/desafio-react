@@ -9,6 +9,7 @@ interface InputWithLabelProps {
   placeholder: string
   register: UseFormRegister<any>
   errors: FieldErrors<any>
+  disabled: boolean
 }
 
 export function InputWithLabel({
@@ -18,6 +19,7 @@ export function InputWithLabel({
   placeholder,
   register,
   errors,
+  disabled
 }: InputWithLabelProps) {
   return (
     <div className="grid w-full items-center gap-1.5">
@@ -31,6 +33,7 @@ export function InputWithLabel({
           required: 'Este campo é obrigatório',
           maxLength: 55,
         })}
+        disabled={disabled}
       />
       {errors[id] && (
         <p className="text-red-600 text-xs">{String(errors[id]?.message)}</p>
