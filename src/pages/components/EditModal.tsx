@@ -7,15 +7,20 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useContext, useState } from 'react'
-import { BiPlusCircle } from 'react-icons/bi'
 import Form from './form'
 import { ItensContext, ItensTypes } from '@/contexts/ItensContext'
-import { format } from 'date-fns/format'
-import { ptBR } from 'date-fns/locale'
 import { useToast } from '@/hooks/use-toast'
+import { Button } from '@/components/ui/button'
+import { Eye, Pencil } from 'lucide-react'
+import Tooltip from '@/components/Tooltip'
 
-export function CreateItem() {
-  const { saveItemsContext } = useContext(ItensContext)
+interface EditItemProps {
+  viewMode: boolean
+  data: ItensTypes
+}
+
+export function EditItem({ viewMode, data }: EditItemProps) {
+  const { updateItemsContext } = useContext(ItensContext)
   const { toast } = useToast()
 
   const [open, setOpen] = useState(false)
@@ -25,25 +30,15 @@ export function CreateItem() {
     setOpen(!open)
   }
 
-  const generateRandomId = () => {
-    return Math.random().toString(36).substr(2, 9) + Date.now().toString(36)
-  }
-
-  const onSubmitData = (data: ItensTypes) => {
+  const onSubmitData = (editData: ItensTypes) => {
     setIsLoading(true)
 
-    const randomId = generateRandomId()
-
     setTimeout(() => {
-      saveItemsContext({
-        ...data,
-        id: randomId,
-        created_at: format(new Date(), 'dd/MM/yyyy', { locale: ptBR }),
-      })
+      updateItemsContext(editData)
 
       toast({
         title: 'Sucesso!',
-        description: 'Tarefa criada com sucesso',
+        description: 'Tarefa editada com sucesso',
         icon: 'success',
       })
 
@@ -55,22 +50,38 @@ export function CreateItem() {
   return (
     <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
-        <button className="border-none flex items-center px-4 py-2 bg-greenDark hover:opacity-80 text-gray100 rounded-lg gap-2 font-bold text-sm transition dark:bg-bluedark dark:hover:bg-blue">
-          Criar
-          <BiPlusCircle size={18} color="#f2f2f2" />
-        </button>
+        <Button
+          id={viewMode ? 'view-button' : 'edit-button'}
+          variant="outline"
+          size="icon"
+          onClick={handleOpen}
+        >
+          {viewMode ? (
+            <Eye className="h-4 w-4 " />
+          ) : (
+            <Pencil className="h-4 w-4" />
+          )}
+        </Button>
       </DialogTrigger>
+      <Tooltip
+        text={viewMode ? 'Visualizar' : 'Editar'}
+        anchorSelect={viewMode ? '#view-button' : '#edit-button'}
+      />
+
       <DialogContent className="sm:max-w-[625px]">
         <DialogHeader>
-          <DialogTitle>Adicionar tarefa</DialogTitle>
+          <DialogTitle>
+            {viewMode ? 'Visualizar tarefa' : 'Editar tarefa'}
+          </DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
 
         <Form 
           onSubmitData={onSubmitData}
+          data={data}
           closeModal={handleOpen}
           isLoading={isLoading}
-          viewMode={false}
+          viewMode={viewMode}
         />
       </DialogContent>
     </Dialog>

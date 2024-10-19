@@ -2,38 +2,33 @@ import { CgSpinner } from 'react-icons/cg'
 import { useForm } from 'react-hook-form'
 import { InputWithLabel } from '@/components/form/inputWithLabel'
 import { SelectWithLabel } from '@/components/form/selectWithLabel'
-import { DatePickerWithLabel } from '@/components/form/datePicker'
+import { ItensTypes } from '@/contexts/ItensContext'
 
 interface PropsForm {
-  onSubmit: () => void,
-  data: object,
-  handleInputChange: () => void,
-  errors: object,
+  onSubmitData: (data: ItensTypes) => void,
+  data?: ItensTypes,
   isLoading: boolean,
   closeModal: () => void,
-  editMode: boolean,
   viewMode: boolean,
 }
 
 export default function Form({
-  onSubmit,
+  onSubmitData,
   data,
-  handleInputChange,
   isLoading,
   closeModal,
-  editMode,
   viewMode,
 }: PropsForm) {
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
     defaultValues: {
-      nome: '',
-      descricao: '',
-      data: '',
-      prioridade: ''
+      id: data?.id || '',
+      name: data?.name || '',
+      description: data?.description || '',
+      priority: data?.priority || '',
+      created_at: data?.created_at || '',
     }
   })
 
-  const onSubmitData = data => console.log("Dados:", data)
 
   const dataPriority = [
     {id: 'alta', name: 'Alta'},
@@ -45,34 +40,27 @@ export default function Form({
     <form onSubmit={handleSubmit(onSubmitData)}>
       <div className="pt-2 space-y-4">
         <InputWithLabel
-          id="nome"
+          id="name"
           label="Nome *"
           placeholder="Digite um nome"
           type="text"
           register={register}
           errors={errors}
+          disabled={viewMode}
         />
 
         <InputWithLabel
-          id="descricao"
+          id="description"
           label="Descrição *"
           placeholder="Digite a descrição"
           type="text"
           register={register}
           errors={errors}
-        />
-
-        <DatePickerWithLabel 
-          label="Data *"
-          id="data"
-          register={register}
-          setValue={setValue}
-          watch={watch}
-          errors={errors}
+          disabled={viewMode}
         />
 
         <SelectWithLabel 
-          id="prioridade"
+          id="priority"
           label="Prioridade *"
           register={register}
           placeholder="Selecione a prioridade"
@@ -80,6 +68,7 @@ export default function Form({
           data={dataPriority}
           setValue={setValue}
           watch={watch}
+          disabled={viewMode}
         />
 
         {!viewMode && (

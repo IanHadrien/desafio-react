@@ -6,44 +6,92 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { CreateItem } from './createModal'
+import { CreateItem } from './CreateModal'
+import { ItensTypes } from '@/contexts/ItensContext'
+import { EditItem } from './EditModal'
+import { DeleteItem } from './DeleteModal'
+import { ArrowUpDown } from 'lucide-react'
 
-interface dataTypes {
-  id: string
-  nome: string
-  descricao: string
-  data: string
-  prioridade: string
+interface TableComponentProps {
+  data: ItensTypes[]
 }
 
-export function TableComponent({ data }) {
+export function TableComponent({ data }: TableComponentProps) {
+  const dataPriority = [
+    { id: 'alta', name: 'Alta' },
+    { id: 'media', name: 'Média' },
+    { id: 'baixa', name: 'Baixa' },
+  ]
+
+  const getPriorityName = (priorityId: string) => {
+    const priority = dataPriority.find(({ id }) => id === priorityId)
+    return priority?.name || 'Desconhecida'
+  }
+
+  const getPriorityColor = (priorityId: string) => {
+    switch (priorityId) {
+      case 'alta':
+        return 'bg-red-500'
+      case 'media':
+        return 'bg-yellow-500'
+      case 'baixa':
+        return 'bg-green-500'
+      default:
+        return 'bg-gray-300'
+    }
+  }
+
   return (
     <div className="space-y-2">
       <CreateItem />
 
-      <Table className="border shadow-xl">
+      <Table className="border-y shadow-xl">
         <TableHeader className="rounded-full ">
-          <TableRow className="rounded-full">
-            <TableHead className="">Id</TableHead>
+          <TableRow>
             <TableHead className="">Nome</TableHead>
             <TableHead className="">Descrição</TableHead>
-            <TableHead className="">Data</TableHead>
-            <TableHead className="">Prioridade</TableHead>
-            <TableHead className="text-right "></TableHead>
+            <TableHead className="w-[150px]">
+              <button className='flex items-center text-base'
+                onClick={() => console.log('Ordenar por data')}
+              >
+                Data
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </button>
+            </TableHead>
+            <TableHead className="w-[150px]">
+              <button className='flex items-center text-base'
+                onClick={() => console.log('Ordenar por prioridade')}
+              >
+                Prioridade
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </button>
+            </TableHead>
+            <TableHead className="text-right w-[100px]"></TableHead>
           </TableRow>
         </TableHeader>
+
         <TableBody className="border-gray-400 shadow">
-          {data?.map((item: dataTypes) => (
+          {data?.map((item) => (
             <TableRow key={item.id}>
-              <TableCell className="font-medium">{item.id}</TableCell>
-              <TableCell>{item.nome}</TableCell>
-              <TableCell>{item.descricao}</TableCell>
-              <TableCell>{item.data}</TableCell>
-              <TableCell>{item.prioridade}</TableCell>
-              <TableCell className="flex text-right space-x-1">
-                <span>view</span>
-                <span>Edit</span>
-                <span>Delete</span>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.description}</TableCell>
+              <TableCell>{item.created_at}</TableCell>
+              <TableCell>
+                <div className="flex items-center">
+                  {getPriorityName(item.priority)}
+                  <div
+                    className={`ml-1 w-3 h-3 rounded-full ${getPriorityColor(
+                      item.priority
+                    )}`}
+                  />
+                </div>
+              </TableCell>
+              <TableCell className="flex items-end justify-end space-x-1">
+                <EditItem viewMode={true} data={item} />
+
+                <EditItem viewMode={false} data={item} />
+
+                <DeleteItem dataId={item.id} />
               </TableCell>
             </TableRow>
           ))}
