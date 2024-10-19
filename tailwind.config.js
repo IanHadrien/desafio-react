@@ -15,11 +15,13 @@ export default {
   			gray500: '#262626',
   			gray600: '#1a1a1a',
   			gray700: '#0d0d0d',
+				greenDark: '#015958',
   			purple: '#8284fa',
   			purpledark: '#5e60ce',
   			blue: '#4ea8d3',
   			bluedark: '#1e6f9f',
   			danger: '#e25858',
+
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
