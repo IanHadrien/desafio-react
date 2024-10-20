@@ -46,6 +46,7 @@ export default function Pagination({
         </li>
 
         <button
+          data-testid="next-page"
           className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white dark:bg-dark text-sm font-medium text-gray-500 hover:bg-gray-50"
           onClick={() => setCurrentPage(page === totalPages ? totalPages : page + 1)}
         >
