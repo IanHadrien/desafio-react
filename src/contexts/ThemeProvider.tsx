@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 
 const initialState = {
   theme: 'system',
-  setTheme: () => null,
+  setTheme: (thema: string) => null,
 }
 
 const ThemeProviderContext = createContext(initialState)

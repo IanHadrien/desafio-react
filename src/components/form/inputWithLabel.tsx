@@ -31,6 +31,7 @@ export function InputWithLabel({
         placeholder={placeholder}
         {...register(id, {
           required: 'Este campo é obrigatório',
+          minLength: 3,
           maxLength: 55,
         })}
         disabled={disabled}

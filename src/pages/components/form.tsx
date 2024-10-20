@@ -29,7 +29,6 @@ export default function Form({
     }
   })
 
-
   const dataPriority = [
     {id: 'alta', name: 'Alta'},
     {id: 'media', name: 'Média'},
@@ -78,7 +77,7 @@ export default function Form({
         )}
       </div>
 
-      <div className="bg-gray-50 py-3 sm:flex sm:flex-row-reverse">
+      <div className="bg-gray-50 dark:bg-dark py-3 sm:flex sm:flex-row-reverse">
         {!viewMode && (
           <button
             className="inline-flex w-full justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-80 sm:ml-3 sm:w-auto"

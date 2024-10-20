@@ -1,4 +1,12 @@
-export default function Input({ handleInputChange, value }) {
+interface InputProps {
+  handleInputChange: (value: string) => void 
+  value: string
+}
+
+export default function Input({ 
+  handleInputChange, 
+  value 
+}: InputProps) {
   return (
     <input
       type="text"

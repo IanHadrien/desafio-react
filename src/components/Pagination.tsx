@@ -24,8 +24,8 @@ export default function Pagination({
 
       <ul className="inline-flex items-center -space-x-px">
         <button
-          className="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
-          onClick={() => setCurrentPage(1)}
+          className="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white dark:bg-dark px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
+          onClick={() => setCurrentPage(page === 1 ? 1 : page - 1)}
         >
           <span className="sr-only">Primeira</span>
           <svg
@@ -40,14 +40,14 @@ export default function Pagination({
         </button>
 
         <li>
-          <button className="z-10 bg-roxo-roxo2 bg-opacity-10 border-roxo-roxo2 text-azul-300 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+          <button className="z-10 bg-opacity-10 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium dark:bg-dark">
             {page}
           </button>
         </li>
 
         <button
-          className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-          onClick={() => setCurrentPage(2)}
+          className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white dark:bg-dark text-sm font-medium text-gray-500 hover:bg-gray-50"
+          onClick={() => setCurrentPage(page === totalPages ? totalPages : page + 1)}
         >
           <span className="sr-only">Última</span>
           <svg

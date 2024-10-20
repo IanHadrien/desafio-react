@@ -1,5 +1,4 @@
 import Header from '../components/Header'
-import ModeToggle from '../components/ModeToggle'
 import { TableComponent } from '@/pages/components/Table'
 import Input from '@/components/form/input'
 import { useContext, useState } from 'react'
@@ -43,7 +42,7 @@ export default function Index() {
   }
 
   return (
-    <main className="bg-white dark:bg-gray600 h-screen">
+    <main className="bg-white dark:bg-gray600 h-screen transition-colors">
       <Header />
 
       <section className="w-11/12 md:w-2/3 lg:max-w-[900px] m-auto">
@@ -103,8 +102,6 @@ export default function Index() {
           )}
         </div>
       </section>
-
-      <ModeToggle />
     </main>
   )
 }
