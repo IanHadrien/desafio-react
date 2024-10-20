@@ -19,7 +19,8 @@ export default function ModeToggle() {
         type="checkbox"
         className="checkbox"
         id="checkbox"
-        checked={theme === 'light'}
+        data-testid="checkbox"
+        checked={theme === 'dark'}
         onChange={toggleDarkMode}
       />
       <label htmlFor="checkbox" className="checkbox-label border border-gray-100 dark:border-bluedark bg-gray-100 dark:bg-dark transition-colors">
