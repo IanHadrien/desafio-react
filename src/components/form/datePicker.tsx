@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
 
@@ -10,54 +9,31 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Label } from '@/components/ui/label'
-import {
-  FieldErrors,
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch,
-} from 'react-hook-form'
+import { ptBR } from 'date-fns/locale'
 
 interface DatePickerWithLabelProps {
-  label: string
-  id: string
-  register: UseFormRegister<any>
-  setValue: UseFormSetValue<any>
-  watch: UseFormWatch<any>
-  errors: FieldErrors<any>
+  setValue: (value: any) => void
+  value: string
 }
 
 export function DatePickerWithLabel({
-  label,
-  id,
-  register,
   setValue,
-  watch,
-  errors,
+  value,
 }: DatePickerWithLabelProps) {
-  const selectedDate = watch(id)
-
-  useEffect(() => {
-    register(id, { required: 'A data é obrigatória' })
-  }, [register, id])
-
   return (
     <div className="flex flex-col gap-1.5">
-      <Label>{label}</Label>
-
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant={'outline'}
             className={cn(
-              'w-full justify-start text-left font-normal',
-              !selectedDate && 'text-muted-foreground',
-              errors[id] && 'border-red-500'
+              'w-full justify-start text-left font-normal h-12 bg-gray-100',
+              !value && 'text-muted-foreground',
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {selectedDate ? (
-              format(new Date(selectedDate), 'PPP')
+            {value ? (
+              format(new Date(value), 'PPP', { locale: ptBR })
             ) : (
               <span>Selecione uma data</span>
             )}
@@ -67,16 +43,12 @@ export function DatePickerWithLabel({
           <div className="rounded-md border">
             <Calendar
               mode="single"
-              selected={selectedDate ? new Date(selectedDate) : undefined}
-              onSelect={(date) => setValue(id, date)}
+              selected={value ? new Date(value) : undefined}
+              onSelect={(date) => setValue(date)}
             />
           </div>
         </PopoverContent>
       </Popover>
-
-      {errors[id] && (
-        <p className="text-red-600 text-xs">{String(errors[id]?.message)}</p>
-      )}
     </div>
   )
 }
