@@ -51,6 +51,7 @@ export function EditItem({ viewMode, data }: EditItemProps) {
     <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         <Button
+          data-testid="edit-button-modal"
           id={viewMode ? 'view-button' : 'edit-button'}
           variant="outline"
           size="icon"
