@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
 
@@ -9,33 +10,54 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { ptBR } from 'date-fns/locale'
+import { Label } from '@/components/ui/label'
+import { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form'
 
 interface DatePickerWithLabelProps {
-  setValue: (value: any) => void
-  value: string
+  id: string
+  label: string
+  register: UseFormRegister<any>
+  errors: FieldErrors<any>
+  disabled: boolean
+  setValue: UseFormSetValue<any>
+  watch: UseFormWatch<any>
 }
 
 export function DatePickerWithLabel({
+  label,
+  id,
+  register,
   setValue,
-  value,
+  watch,
+  errors,
+  disabled,
 }: DatePickerWithLabelProps) {
+  const selectedDate = watch(id)
+
+  React.useEffect(() => {
+    register(id, { required: 'A data é obrigatória' })
+  }, [register, id])
+
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col mb-4 gap-1.5">
+      <Label htmlFor={id}>{label}</Label>
+
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant={'outline'}
             className={cn(
-              'w-full justify-start text-left font-normal h-12 bg-gray-100 dark:bg-gray500',
-              !value && 'text-muted-foreground',
+              'w-full justify-start text-left font-normal',
+              !selectedDate && 'text-muted-foreground',
+              errors[id] && 'border-red-500'
             )}
+            disabled={disabled}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {value ? (
-              format(new Date(value), 'PPP', { locale: ptBR })
+            {selectedDate ? (
+              selectedDate
             ) : (
-              <span>Selecione uma data</span>
+              <span>Selecione a data de criação</span>
             )}
           </Button>
         </PopoverTrigger>
@@ -43,12 +65,16 @@ export function DatePickerWithLabel({
           <div className="rounded-md border">
             <Calendar
               mode="single"
-              selected={value ? new Date(value) : undefined}
-              onSelect={(date) => setValue(date)}
+              selected={selectedDate ? new Date(selectedDate) : undefined}
+              onSelect={(date) => setValue(id, format(new Date(date), 'dd/MM/yyyy'))}
             />
           </div>
         </PopoverContent>
       </Popover>
+
+      {errors[id] && (
+        <p className="text-red-600 text-xs">{String(errors[id]?.message)}</p>
+      )}
     </div>
   )
 }

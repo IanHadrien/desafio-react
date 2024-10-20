@@ -10,8 +10,6 @@ import { useContext, useState } from 'react'
 import { BiPlusCircle } from 'react-icons/bi'
 import Form from './Form'
 import { ItensContext, ItensTypes } from '@/contexts/ItensContext'
-import { format } from 'date-fns/format'
-import { ptBR } from 'date-fns/locale'
 import { useToast } from '@/hooks/use-toast'
 
 export default function CreateItem() {
@@ -38,7 +36,6 @@ export default function CreateItem() {
       saveItemsContext({
         ...data,
         id: randomId,
-        created_at: format(new Date(), 'dd/MM/yyyy', { locale: ptBR }),
       })
 
       toast({

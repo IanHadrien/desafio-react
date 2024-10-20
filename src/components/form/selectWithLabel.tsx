@@ -42,7 +42,7 @@ export function SelectWithLabel({
   setValue,
   disabled
 }: SelectWithLabelProps) {
-  const selectedValue = watch(id) // Watching the value of the select field
+  const selectedValue = watch(id)
 
   useEffect(() => {
     register(id, {

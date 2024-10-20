@@ -6,8 +6,14 @@ import { ItensContext } from '@/contexts/ItensContext'
 import { Button } from '@/components/ui/button'
 import { Search, XCircleIcon } from 'lucide-react'
 import Tooltip from '@/components/Tooltip'
-import { DatePickerWithLabel } from '@/components/form/datePicker'
 import Pagination from '@/components/Pagination'
+import { SelectWithLabel } from './components/Select'
+
+const dataPriority = [
+  { id: 'alta', name: 'Alta' },
+  { id: 'media', name: 'Média' },
+  { id: 'baixa', name: 'Baixa' },
+]
 
 export default function Index() {
   const {
@@ -19,13 +25,13 @@ export default function Index() {
   } = useContext(ItensContext)
 
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 2
+  const itemsPerPage = 10
 
   const paginatedItems = getPaginatedItems(currentPage, itemsPerPage)
 
   const [searchQuery, setSearchQuery] = useState({
     name: '',
-    created_at: '',
+    priority: '',
   })
 
   const onSubmitSearch = () => {
@@ -37,16 +43,16 @@ export default function Index() {
     clearSearchItems()
     setSearchQuery({
       name: '',
-      created_at: '',
+      priority: '',
     })
   }
 
   return (
-    <main className="bg-white dark:bg-gray600 h-screen transition-colors">
+    <main className="bg-white dark:bg-gray600 h-full transition-colors">
       <Header />
 
       <section className="w-11/12 md:w-2/3 lg:max-w-[900px] m-auto">
-        <div className="flex flex-1 justify-between gap-2 -mt-6">
+        <div className="block space-y-2 sm-500:space-y-0 sm-500:flex sm-500:justify-between gap-2 -mt-6">
           <Input
             handleInputChange={(value: string) =>
               setSearchQuery({ ...searchQuery, name: value })
@@ -54,20 +60,17 @@ export default function Index() {
             value={searchQuery.name}
           />
 
-          <DatePickerWithLabel
-            setValue={(value) =>
-              setSearchQuery({
-                ...searchQuery,
-                created_at: value,
-              })
-            }
-            value={searchQuery.created_at}
+          <SelectWithLabel 
+            placeholder="Prioridade"
+            data={dataPriority}
+            setValue={(value) => setSearchQuery({ ...searchQuery, priority: value})}
+            value={searchQuery.priority}
           />
 
           <Button
             data-testid='search-button'
             id="search-button"
-            className="bg-greenDark dark:bg-bluedark hover:bg-greenDarkHover dark:hover:opacity-80 h-12 transition"
+            className="bg-greenDark dark:bg-bluedark hover:bg-greenDarkHover dark:hover:opacity-80 h-12 transition w-full sm-500:w-min"
             onClick={onSubmitSearch}
           >
             <Search color="#f2f2f2" />
@@ -76,7 +79,7 @@ export default function Index() {
 
           <Button
             id="clear-button"
-            className="bg-greenDark dark:bg-bluedark hover:bg-greenDarkHover dark:hover:opacity-80 h-12 transition"
+            className="bg-greenDark dark:bg-bluedark hover:bg-greenDarkHover dark:hover:opacity-80 h-12 transition w-full sm-500:w-min"
             onClick={onClearSearch}
           >
             <XCircleIcon color="#f2f2f2" className="w-5 h-5" />

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { InputWithLabel } from '@/components/form/inputWithLabel'
 import { SelectWithLabel } from '@/components/form/selectWithLabel'
 import { ItensTypes } from '@/contexts/ItensContext'
+import { DatePickerWithLabel } from '@/components/form/datePicker'
 
 interface PropsForm {
   onSubmitData: (data: ItensTypes) => void,
@@ -54,6 +55,16 @@ export default function Form({
           placeholder="Digite a descrição"
           type="text"
           register={register}
+          errors={errors}
+          disabled={viewMode}
+        />
+
+        <DatePickerWithLabel 
+          label="Data de criação *"
+          id="created_at"
+          register={register}
+          setValue={setValue}
+          watch={watch}
           errors={errors}
           disabled={viewMode}
         />

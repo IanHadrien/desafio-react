@@ -1,4 +1,3 @@
-import { format } from 'date-fns'
 import { createContext, ReactNode, useEffect, useState } from 'react'
 
 export interface ItensTypes {
@@ -11,7 +10,7 @@ export interface ItensTypes {
 
 interface SearchItemProps {
   name: string
-  created_at: string
+  priority: string
 }
 
 interface ItensContextType {
@@ -52,7 +51,8 @@ export function ItensContextProvider({ children }: ItensContextProviderProps) {
 
   const [isAscending, setIsAscending] = useState(true)
   const [isAscendingPriority, setIsAscendingPriority] = useState(true)
-  const itemsPerPage = 2
+
+  const itemsPerPage = 10
 
   useEffect(() => {
     localStorage.setItem('itens', JSON.stringify(originalItems))
@@ -111,15 +111,15 @@ export function ItensContextProvider({ children }: ItensContextProviderProps) {
   }
 
   const searchItemsByName = (searchItens: SearchItemProps) => {
-    const { name, created_at } = searchItens
+    const { name, priority } = searchItens
 
     const filteredItems = originalItems.filter((item) => {
       const matchesName = name
         ? item.name.toLowerCase().includes(name.toLowerCase())
         : true
 
-      const matchesDate = created_at
-      ? format(new Date(created_at), 'dd/MM/yyyy') === item.created_at
+      const matchesDate = priority
+      ? item.priority === priority
       : true
 
       return matchesName && matchesDate
