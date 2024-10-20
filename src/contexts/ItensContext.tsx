@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useState } from 'react'
+import { format } from 'date-fns'
+import { createContext, ReactNode, useEffect, useState } from 'react'
 
 export interface ItensTypes {
   id: string
@@ -8,11 +9,22 @@ export interface ItensTypes {
   priority: string
 }
 
+interface SearchItemProps {
+  name: string
+  created_at: string
+}
+
 interface ItensContextType {
   itens: ItensTypes[]
   saveItemsContext: (newItens: ItensTypes) => void
   updateItemsContext: (editItens: ItensTypes) => void
   deleteItemContext: (idIten: string) => void
+  sortItemsByDate: () => void
+  sortByPriority: () => void
+  searchItemsByName: (searchItens: SearchItemProps) => void
+  clearSearchItems: () => void
+  getPaginatedItems: (page: number, itemsPerPage: number) => ItensTypes[]
+  totalPages: number
 }
 
 export const ItensContext = createContext({} as ItensContextType)
@@ -21,39 +33,113 @@ interface ItensContextProviderProps {
   children: ReactNode
 }
 
+const priorityOrder: Record<string, number> = {
+  alta: 1,
+  media: 2,
+  baixa: 3,
+}
+
 export function ItensContextProvider({ children }: ItensContextProviderProps) {
-  const [itens, setItens] = useState([
-    {
-      id: '1',
-      name: 'Teste',
-      description: 'teste',
-      created_at: '28/90/2024',
-      priority: 'alta',
-    },
-    {
-      id: '2',
-      name: 'Teste 2',
-      description: 'teste 2',
-      created_at: '28/90/2024',
-      priority: 'baixa',
-    },
-  ])
+  const [itens, setItens] = useState<ItensTypes[]>(() => {
+    const storedItems = localStorage.getItem('itens')
+    return storedItems ? JSON.parse(storedItems) : []
+  })
+
+  const [originalItems, setOriginalItems] = useState<ItensTypes[]>(() => {
+    const storedItems = localStorage.getItem('itens')
+    return storedItems ? JSON.parse(storedItems) : []
+  })
+
+  const [isAscending, setIsAscending] = useState(true)
+  const [isAscendingPriority, setIsAscendingPriority] = useState(true)
+  const itemsPerPage = 2
+
+  useEffect(() => {
+    localStorage.setItem('itens', JSON.stringify(originalItems))
+  }, [originalItems])
 
   const saveItemsContext = (newItens: ItensTypes) => {
-    setItens([...itens, newItens])
+    const saveItems = [...originalItems, newItens]
+    setOriginalItems(saveItems)
+    setItens(saveItems)
   }
 
   const updateItemsContext = (editItens: ItensTypes) => {
-    setItens((prevItens) =>
-      prevItens.map((item) =>
-        item.id === editItens.id ? { ...item, ...editItens } : item
-      )
+    const updatedItems = originalItems.map((item) =>
+      item.id === editItens.id ? { ...item, ...editItens } : item
     )
+    setOriginalItems(updatedItems)
+    setItens(updatedItems)
   }
 
   const deleteItemContext = (idIten: string) => {
-    setItens((prevItens) => prevItens.filter((item) => item.id !== idIten))
+    const updatedItems = originalItems.filter((item) => item.id !== idIten)
+    setOriginalItems(updatedItems)
+    setItens(updatedItems)
   }
+
+  const sortItemsByDate = () => {
+    const sortedItems = [...itens].sort((a, b) => {
+      const dateA = new Date(a.created_at.split('/').reverse().join('-'))
+      const dateB = new Date(b.created_at.split('/').reverse().join('-'))
+
+      if (isAscending) {
+        return dateA.getTime() - dateB.getTime()
+      } else {
+        return dateB.getTime() - dateA.getTime()
+      }
+    })
+
+    setItens(sortedItems)
+    setIsAscending(!isAscending)
+  }
+
+  const sortByPriority = () => {
+    const sortedItems = [...itens].sort((a, b) => {
+      const priorityA = priorityOrder[a.priority]
+      const priorityB = priorityOrder[b.priority]
+
+      if (isAscendingPriority) {
+        return priorityA - priorityB
+      } else {
+        return priorityB - priorityA
+      }
+    })
+
+    setItens(sortedItems)
+    setIsAscendingPriority(!isAscendingPriority)
+  }
+
+  const searchItemsByName = (searchItens: SearchItemProps) => {
+    const { name, created_at } = searchItens
+
+    const filteredItems = originalItems.filter((item) => {
+      const matchesName = name
+        ? item.name.toLowerCase().includes(name.toLowerCase())
+        : true
+
+      const matchesDate = created_at
+      ? format(new Date(created_at), 'dd/MM/yyyy') === item.created_at
+      : true
+
+      return matchesName && matchesDate
+    })
+
+    setItens(filteredItems)
+  }
+
+  const clearSearchItems = () => setItens(originalItems)
+
+  const getPaginatedItems = (
+    page: number,
+    itemsPerPage: number
+  ): ItensTypes[] => {
+    const startIndex = (page - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return itens.slice(startIndex, endIndex)
+  }
+
+  const totalPages = Math.ceil(itens.length / itemsPerPage)
 
   return (
     <ItensContext.Provider
@@ -61,7 +147,13 @@ export function ItensContextProvider({ children }: ItensContextProviderProps) {
         itens,
         saveItemsContext,
         updateItemsContext,
-        deleteItemContext
+        deleteItemContext,
+        sortItemsByDate,
+        sortByPriority,
+        searchItemsByName,
+        clearSearchItems,
+        getPaginatedItems,
+        totalPages,
       }}
     >
       {children}

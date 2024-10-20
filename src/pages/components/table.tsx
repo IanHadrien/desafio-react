@@ -7,21 +7,24 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { CreateItem } from './CreateModal'
-import { ItensTypes } from '@/contexts/ItensContext'
+import { ItensContext, ItensTypes } from '@/contexts/ItensContext'
 import { EditItem } from './EditModal'
 import { DeleteItem } from './DeleteModal'
 import { ArrowUpDown } from 'lucide-react'
+import { useContext } from 'react'
 
 interface TableComponentProps {
   data: ItensTypes[]
 }
 
+const dataPriority = [
+  { id: 'alta', name: 'Alta' },
+  { id: 'media', name: 'Média' },
+  { id: 'baixa', name: 'Baixa' },
+]
+
 export function TableComponent({ data }: TableComponentProps) {
-  const dataPriority = [
-    { id: 'alta', name: 'Alta' },
-    { id: 'media', name: 'Média' },
-    { id: 'baixa', name: 'Baixa' },
-  ]
+  const { sortItemsByDate, sortByPriority } = useContext(ItensContext)
 
   const getPriorityName = (priorityId: string) => {
     const priority = dataPriority.find(({ id }) => id === priorityId)
@@ -51,16 +54,18 @@ export function TableComponent({ data }: TableComponentProps) {
             <TableHead className="">Nome</TableHead>
             <TableHead className="">Descrição</TableHead>
             <TableHead className="w-[150px]">
-              <button className='flex items-center text-base'
-                onClick={() => console.log('Ordenar por data')}
+              <button
+                className="flex items-center text-base"
+                onClick={sortItemsByDate}
               >
                 Data
                 <ArrowUpDown className="ml-2 h-4 w-4" />
               </button>
             </TableHead>
             <TableHead className="w-[150px]">
-              <button className='flex items-center text-base'
-                onClick={() => console.log('Ordenar por prioridade')}
+              <button
+                className="flex items-center text-base"
+                onClick={sortByPriority}
               >
                 Prioridade
                 <ArrowUpDown className="ml-2 h-4 w-4" />
