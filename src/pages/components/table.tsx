@@ -6,12 +6,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { CreateItem } from './CreateModal'
 import { ItensContext, ItensTypes } from '@/contexts/ItensContext'
 import { EditItem } from './EditModal'
 import { DeleteItem } from './DeleteModal'
 import { ArrowUpDown } from 'lucide-react'
 import { useContext } from 'react'
+import CreateItem from './CreateModal'
 
 interface TableComponentProps {
   data: ItensTypes[]

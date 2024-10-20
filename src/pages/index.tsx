@@ -65,6 +65,7 @@ export default function Index() {
           />
 
           <Button
+            data-testid='search-button'
             id="search-button"
             className="bg-greenDark dark:bg-bluedark hover:bg-greenDarkHover dark:hover:opacity-80 h-12 transition"
             onClick={onSubmitSearch}
