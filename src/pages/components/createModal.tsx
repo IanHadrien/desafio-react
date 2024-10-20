@@ -14,7 +14,7 @@ import { format } from 'date-fns/format'
 import { ptBR } from 'date-fns/locale'
 import { useToast } from '@/hooks/use-toast'
 
-export function CreateItem() {
+export default function CreateItem() {
   const { saveItemsContext } = useContext(ItensContext)
   const { toast } = useToast()
 
@@ -55,7 +55,7 @@ export function CreateItem() {
   return (
     <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
-        <button className="border-none flex items-center px-4 py-2 bg-greenDark hover:opacity-80 text-gray100 rounded-lg gap-2 font-bold text-sm transition dark:bg-bluedark dark:hover:bg-blue">
+        <button data-testid='create-button-modal' className="border-none flex items-center px-4 py-2 bg-greenDark hover:opacity-80 text-gray100 rounded-lg gap-2 font-bold text-sm transition dark:bg-bluedark dark:hover:bg-blue">
           Criar
           <BiPlusCircle size={18} color="#f2f2f2" />
         </button>
