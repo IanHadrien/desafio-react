@@ -44,6 +44,7 @@ export function DeleteItem({ dataId }: DeleteItemProps) {
     <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         <Button
+          data-testid="delete-button-modal"
           id="delete-button"
           variant="destructive"
           size="icon"
