@@ -16,6 +16,7 @@ export default {
   			gray600: '#1a1a1a',
   			gray700: '#0d0d0d',
 				greenDark: '#015958',
+				greenDarkHover: '#015950',
   			purple: '#8284fa',
   			purpledark: '#5e60ce',
   			blue: '#4ea8d3',

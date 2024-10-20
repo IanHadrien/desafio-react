@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { useContext, useState } from 'react'
-import Form from './form'
+import Form from './Form'
 import { ItensContext, ItensTypes } from '@/contexts/ItensContext'
 import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
